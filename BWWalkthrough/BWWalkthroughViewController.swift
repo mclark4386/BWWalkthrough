@@ -43,7 +43,7 @@ At the moment it's only used to perform custom animations on didScroll.
     
     // MARK: - Public properties -
     
-    weak var delegate:BWWalkthroughViewControllerDelegate?
+    @IBOutlet weak var delegate:NSObject? //so that I can rig it in IB
     
     // TODO: If you need a page control, next or prev buttons add them via IB and connect them with these Outlets
     @IBOutlet var pageControl:UIPageControl?
@@ -119,7 +119,9 @@ At the moment it's only used to perform custom animations on didScroll.
         
         if (currentPage + 1) < controllers.count {
             
-            delegate?.walkthroughNextButtonPressed?()
+            if let del = (delegate as? BWWalkthroughViewControllerDelegate){
+                del.walkthroughNextButtonPressed?()
+            }
             
             var frame = scrollview.frame
             frame.origin.x = CGFloat(currentPage + 1) * frame.size.width
@@ -131,7 +133,9 @@ At the moment it's only used to perform custom animations on didScroll.
         
         if currentPage > 0 {
             
-            delegate?.walkthroughPrevButtonPressed?()
+            if let del = (delegate as? BWWalkthroughViewControllerDelegate){
+                del.walkthroughPrevButtonPressed?()
+            }
             
             var frame = scrollview.frame
             frame.origin.x = CGFloat(currentPage - 1) * frame.size.width
@@ -142,7 +146,9 @@ At the moment it's only used to perform custom animations on didScroll.
     // TODO: If you want to implement a "skip" option 
     // connect a button to this IBAction and implement the delegate with the skipWalkthrough
     @IBAction func close(sender: AnyObject){
-        delegate?.walkthroughCloseButtonPressed?()
+        if let del = (delegate as? BWWalkthroughViewControllerDelegate){
+            del.walkthroughCloseButtonPressed?()
+        }
     }
     
     /**
@@ -203,7 +209,9 @@ At the moment it's only used to perform custom animations on didScroll.
         
         // Notify delegate about the new page
         
-        delegate?.walkthroughPageDidChange?(currentPage)
+        if let del = (delegate as? BWWalkthroughViewControllerDelegate){
+            del.walkthroughPageDidChange?(currentPage)
+        }
         
         // Hide/Show navigation buttons
         
